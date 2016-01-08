@@ -7,12 +7,14 @@
 # Read in the data & convert date / time
 airData<-read.table("data/household_power_consumption.txt", sep=";", header=TRUE, stringsAsFactors=FALSE, na.strings = "?")
 airData$Date<-as.Date(airData$Date, format="%d/%m/%Y")
-airData$Time<-strptime(airData$Time, "%H:%M:%S")
 airData<-subset(airData, Date>="2007-02-01" & Date<= "2007-02-02")
+airData$Time<-strptime(airData$Time, "%H:%M:%S")
+airData$dateTime<-as.POSIXct(paste(airData$Date, airData$Time), format="%Y-%m-%d %H:%M:%S")
 
 # Export plot to png
-png(filename = "plot1.png",
+png(filename = "plot2.png",
     width = 480, height = 480)
-hist(airData$Global_active_power, main="Global Active Power", 
-        xlab="Global Active Power (kilowatts)", ylab="Frequency", col="Red")
+plot(airData$dateTime, airData$Global_active_power, 
+     type="l", xlab="", ylab="Global Active Power (kilowatts)")
 dev.off()
+
